@@ -1,6 +1,6 @@
 {
   "name": "kb-template",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Knowledge-blocks template — fork into kb-{topic} to start a new reference site",
   "type": "module",
   "scripts": {

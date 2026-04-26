@@ -1,4 +1,5 @@
 import { BLOCK_REGISTRY } from './data.js';
+import pkg from '../../package.json';
 
 export function renderFooter() {
   const footer = document.getElementById('footer');
@@ -7,7 +8,8 @@ export function renderFooter() {
     <div class="footer-inner container">
       <span>${BLOCK_REGISTRY.name} · <code>${BLOCK_REGISTRY.subtitle}</code></span>
       <span class="footer-credit">
-        Built from the <a href="https://github.com/brucechanjianle/kb-template">kb-template</a>.
+        Built from <a href="https://github.com/brucechanjianle/kb-template">kb-template</a>
+        <code>v${pkg.version}</code>
       </span>
     </div>
   `;

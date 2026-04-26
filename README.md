@@ -79,6 +79,20 @@ npm run build    # production build → dist/
 npm run preview  # serve the built dist/ for a final check
 ```
 
+## Versioning
+
+The template version lives in `package.json` and is rendered in the
+footer of every page (e.g. `kb-template v1.0.0`). When you release a new
+version of the template:
+
+```bash
+npm version <patch|minor|major>   # bumps package.json + creates git tag
+git push --follow-tags
+```
+
+Topic repos created from a given template version stay pinned to that
+version unless you re-sync them.
+
 ## License
 
 MIT — see [LICENSE](./LICENSE).
