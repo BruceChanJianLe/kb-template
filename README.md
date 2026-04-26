@@ -43,7 +43,7 @@ This repo includes `.github/workflows/pages.yml`. To deploy:
 
 1. Push the repo to GitHub as `<your-user>/kb-<topic>`
 2. Go to **Settings → Pages → Build and deployment** and set source to **GitHub Actions**
-3. Push to `main` — the workflow builds and deploys
+3. Push to `master` — the workflow builds and deploys
 
 Your site will be live at `https://<your-user>.github.io/kb-<topic>/`.
 
