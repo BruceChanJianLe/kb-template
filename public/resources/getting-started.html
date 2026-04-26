@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<section class="section">
+  <h2><span class="section-number">01</span>What this block is</h2>
+  <p class="prose">
+    This is the example block that ships with the <code>kb-template</code>. It
+    demonstrates every content pattern the renderer supports — sections,
+    config blocks, tip callouts, recipe cards, debugging accordions, tables,
+    and cross-block links — so you have a reference when you write your own.
+  </p>
+
+  <p class="prose">
+    Once you understand the patterns, delete this block (or rewrite it) and
+    add your topic's blocks following the same shape.
+  </p>
+</section>
+
+<section class="section">
+  <h2><span class="section-number">02</span>The site at a glance</h2>
+  <p class="prose">
+    A knowledge-blocks site is a multi-page Vite app driven by a single
+    registry. The home page renders cards + a force-directed graph; each
+    block has its own page that loads rich HTML at runtime.
+  </p>
+
+  <div class="cfg">
+    <div class="cfg-head">layout</div>
+<pre>kb-{topic}/
+├── index.html                          home page shell
+├── blocks/&lt;slug&gt;.html                  one entry shell per block
+├── public/resources/&lt;slug&gt;.html        the actual content (this file)
+├── src/
+│   ├── pages/{home,block-detail}.js    page renderers
+│   ├── shared/{data,theme,nav,footer,graph}.js
+│   └── styles/{shared,block-detail}.css
+├── AGENTS.md                           brief for LLM agents
+└── package.json</pre>
+  </div>
+
+  <p class="prose">
+    The split between <code>blocks/&lt;slug&gt;.html</code> (a tiny shell) and
+    <code>public/resources/&lt;slug&gt;.html</code> (the content) is intentional —
+    the shell is what Vite bundles for routing, and the content is fetched
+    at runtime so you can edit it without touching JS.
+  </p>
+</section>
+
+<section class="section">
+  <h2><span class="section-number">03</span>Adding a block — three steps</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Step</th>
+        <th>File</th>
+        <th>What you do</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td><code>src/shared/data.js</code></td>
+        <td>Add an entry to <code>BLOCK_REGISTRY.blocks</code> with slug, title, icon, description, tags, connections, sources</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td><code>blocks/&lt;slug&gt;.html</code></td>
+        <td>Copy an existing entry shell and change <code>data-block-slug</code> + <code>&lt;title&gt;</code></td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td><code>public/resources/&lt;slug&gt;.html</code></td>
+        <td>Write the content using the patterns shown below</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="tip">
+    <strong>Slug rules:</strong> kebab-case, no leading numbers, must match
+    the filename in <code>blocks/</code> and <code>public/resources/</code>.
+    The slug is also the URL.
+  </div>
+</section>
+
+<section class="section">
+  <h2><span class="section-number">04</span>Content vocabulary</h2>
+  <p class="prose">
+    These are the building blocks. Use them inside <code>&lt;section
+    class="section"&gt;</code> wrappers — every section gets a numbered
+    heading and consistent spacing.
+  </p>
+
+  <h3>Prose paragraph</h3>
+  <p class="prose">
+    Use <code>&lt;p class="prose"&gt;</code> for body text. Inline
+    <code>code</code> looks like this. Keep paragraphs short — one idea each.
+  </p>
+
+  <h3>Config block</h3>
+  <p class="prose">
+    Use <code>.cfg</code> for any code, command, or layout diagram. The
+    <code>.cfg-head</code> labels what kind of code it is (<code>bash</code>,
+    <code>python</code>, <code>flow</code>, etc.) — purely visual, no
+    syntax highlighting is applied.
+  </p>
+
+  <div class="cfg">
+    <div class="cfg-head">bash</div>
+<pre>npm install
+npm run dev    # local preview at http://localhost:5173
+npm run build  # production build → dist/</pre>
+  </div>
+
+  <h3>Tip callout</h3>
+  <p class="prose">
+    Use <code>.tip</code> for short, high-signal advice. Bold the lead-in
+    so the reader can skim.
+  </p>
+
+  <div class="tip">
+    <strong>Rule of thumb:</strong> if you find yourself writing more than
+    three sentences in a tip, it should probably be a section instead.
+  </div>
+
+  <h3>Recipe card</h3>
+  <p class="prose">
+    Use <code>.uc</code> ("use case") for end-to-end recipes — a named
+    scenario with a one-line subtitle, a body explaining when to reach for
+    it, and a config block showing the actual invocation.
+  </p>
+
+  <div class="uc">
+    <div class="uc-title">Quick local preview</div>
+    <div class="uc-sub">while writing a block</div>
+    <div class="uc-body">
+      <p>Run the dev server while you edit. Vite hot-reloads on save — no rebuild needed.</p>
+    </div>
+    <div class="cfg">
+      <div class="cfg-head">bash</div>
+<pre>npm run dev</pre>
+    </div>
+  </div>
+
+  <h3>Debugging accordion</h3>
+  <p class="prose">
+    Use <code>&lt;details&gt;</code> for expandable Q&amp;A — symptoms,
+    causes, and recipes that are useful but not always needed. Each
+    summary should be the question or the symptom.
+  </p>
+
+  <details>
+    <summary>The home page graph is empty — what's wrong?</summary>
+    <p class="prose">
+      Either the registry has only one block (no edges to draw), or the
+      <code>connections</code> arrays reference slugs that don't exist
+      yet. Check the browser console for warnings.
+    </p>
+  </details>
+
+  <details>
+    <summary>I added a block but it doesn't show up</summary>
+    <p class="prose">
+      Three things to check, in order: (1) the slug in <code>data.js</code>
+      matches the filenames exactly; (2) <code>blocks/&lt;slug&gt;.html</code>
+      exists; (3) you restarted <code>npm run dev</code> — Vite scans
+      <code>blocks/</code> at startup, so new entries need a restart.
+    </p>
+  </details>
+
+  <h3>Table</h3>
+  <p class="prose">
+    Use <code>&lt;table&gt;</code> for parameter references, comparisons,
+    or anything with a clear column structure. Inline <code>&lt;code&gt;</code>
+    inside cells gets a smaller font automatically.
+  </p>
+
+  <table>
+    <thead>
+      <tr><th>Pattern</th><th>Class</th><th>When to use</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Prose</td><td><code>.prose</code></td><td>Body paragraphs</td></tr>
+      <tr><td>Config</td><td><code>.cfg</code></td><td>Code, commands, layout diagrams</td></tr>
+      <tr><td>Tip</td><td><code>.tip</code></td><td>One-liner high-signal advice</td></tr>
+      <tr><td>Recipe</td><td><code>.uc</code></td><td>Named end-to-end scenario</td></tr>
+      <tr><td>Q&amp;A</td><td><code>&lt;details&gt;</code></td><td>Expandable troubleshooting</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="section">
+  <h2><span class="section-number">05</span>Cross-linking between blocks</h2>
+  <p class="prose">
+    There are two ways blocks reference each other.
+  </p>
+
+  <p class="prose">
+    <strong>Graph edges</strong> go in the <code>connections</code> array
+    of <code>BLOCK_REGISTRY</code>. The home page renders these as edges in
+    the force-directed graph, and each block page shows a "Connected
+    blocks" footer.
+  </p>
+
+  <p class="prose">
+    <strong>Inline references</strong> are plain anchors inside your
+    resource HTML. Link to siblings with <code>./other-slug.html</code> —
+    the resource files all live in the same directory at build time.
+  </p>
+
+  <div class="cfg">
+    <div class="cfg-head">html</div>
+<pre>&lt;p class="prose"&gt;
+  See the &lt;a href="./other-slug.html"&gt;&lt;em&gt;Other Block&lt;/em&gt;&lt;/a&gt;
+  for the rest of the parameters.
+&lt;/p&gt;</pre>
+  </div>
+</section>
+
+<section class="section">
+  <h2><span class="section-number">06</span>Sources field</h2>
+  <p class="prose">
+    Each block in <code>BLOCK_REGISTRY</code> has a <code>sources</code>
+    list. The renderer treats them differently based on URL scheme:
+  </p>
+
+  <table>
+    <thead>
+      <tr><th>URL starts with</th><th>Renders as</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>http://</code> or <code>https://</code></td><td>Outbound link with ↗ icon</td></tr>
+      <tr><td>anything else (relative path)</td><td>Styled file path, no link</td></tr>
+    </tbody>
+  </table>
+
+  <div class="tip">
+    <strong>Why the split?</strong> If your knowledge block lives in a
+    separate repo from the source code it documents, relative file paths
+    won't resolve at runtime. Showing them as styled paths instead of
+    broken links is honest — readers can copy the path and find the file
+    on their own machine.
+  </div>
+</section>
+
+<section class="section">
+  <h2><span class="section-number">07</span>What "done" looks like</h2>
+  <p class="prose">
+    A block is ready to ship when:
+  </p>
+
+  <ul>
+    <li>It has an entry in <code>BLOCK_REGISTRY.blocks</code> with <code>built: true</code></li>
+    <li>Both files exist: <code>blocks/&lt;slug&gt;.html</code> and <code>public/resources/&lt;slug&gt;.html</code></li>
+    <li><code>npm run build</code> succeeds with no errors</li>
+    <li>Every section, table, and recipe is self-contained — a reader
+        landing on this page should be able to act on it</li>
+    <li>External sources have full URLs; local paths render as paths
+        (don't fake-link them)</li>
+  </ul>
+
+  <div class="uc">
+    <div class="uc-title">Smoke test</div>
+    <div class="uc-sub">before committing</div>
+    <div class="uc-body">
+      <p>Build cleanly, then preview the static output to catch broken cross-links and missing assets.</p>
+    </div>
+    <div class="cfg">
+      <div class="cfg-head">bash</div>
+<pre>npm run build
+npm run preview  # open the URL it prints</pre>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
